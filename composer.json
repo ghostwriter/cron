@@ -1,11 +1,11 @@
 {
-    "name": "ghostwriter/wip",
+    "name": "ghostwriter/cron",
     "description": "Here be dragons",
     "license": "BSD-3-Clause",
     "type": "library",
     "keywords": [
         "ghostwriter",
-        "wip"
+        "cron"
     ],
     "authors": [
         {
@@ -15,12 +15,12 @@
             "role": "Developer"
         }
     ],
-    "homepage": "https://github.com/ghostwriter/wip",
+    "homepage": "https://github.com/ghostwriter/cron",
     "support": {
-        "issues": "https://github.com/ghostwriter/wip/issues",
-        "source": "https://github.com/ghostwriter/wip",
-        "rss": "https://github.com/ghostwriter/wip/releases.atom",
-        "security": "https://github.com/ghostwriter/wip/security/advisories/new"
+        "issues": "https://github.com/ghostwriter/cron/issues",
+        "source": "https://github.com/ghostwriter/cron",
+        "rss": "https://github.com/ghostwriter/cron/releases.atom",
+        "security": "https://github.com/ghostwriter/cron/security/advisories/new"
     },
     "funding": [
         {
@@ -28,7 +28,13 @@
             "url": "https://github.com/sponsors/ghostwriter"
         }
     ],
-    "_comment": ["#BlackLivesMatter", "#FreePalestine", "#StandWithIran", "#StandWithUkraine", "#StopGenocide"],
+    "_comment": [
+        "#BlackLivesMatter",
+        "#FreePalestine",
+        "#StandWithIran",
+        "#StandWithUkraine",
+        "#StopGenocide"
+    ],
     "require": {
         "php": "~8.4.0 || ~8.5.0",
         "ext-mbstring": "*",
@@ -52,18 +58,14 @@
         "ghostwriter/phpunit-assertions": "^0.1.0",
         "ghostwriter/testify": "^0.1.2",
         "mockery/mockery": "^1.6.12",
-        "phpunit/phpunit": "^13.1.12",
+        "phpunit/phpunit": "^13.1.13",
         "symfony/var-dumper": "^8.0.8"
     },
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Ghostwriter\\Wip\\": "src"
-        },
-        "files": [
-            "src/constants.php",
-            "src/functions.php"
-        ]
+            "Ghostwriter\\Cron\\": "src"
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -72,12 +74,10 @@
         "files": [
             "tests/bootstrap.php"
         ],
-        "exclude-from-classmap": ["/tests/"]
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
     },
-    "bin": [
-        "bin/console",
-        "bin/console.php"
-    ],
     "config": {
         "allow-plugins": {
             "ghostwriter/coding-standard": true
@@ -96,24 +96,47 @@
         "sort-packages": true,
         "use-parent-dir": false
     },
-    "scripts": {
-        "cache:clear": "rm -rf ./.cache/*",
-        "check": ["@cache:clear", "tools/phar/composer validate", "@test"],
-        "docker": ["@docker:build", "@docker:run"],
-        "docker:build": "docker buildx build --pull --tag workspace .",
-        "docker:run": "docker run -v $(PWD):/github/workspace -w=/github/workspace -e GITHUB_DEBUG=1 -e GITHUB_WORKSPACE=/github/workspace -e GITHUB_TOKEN=github-token -e SIGNING_SECRET_KEY=secret-key workspace",
-        "git:submodule:update": "git submodule update --depth=1 --init --recursive --recommend-shallow --remote",
-        "infection": ["@xdebug", "tools/phar/infection --min-covered-msi=0 --min-msi=0 --show-mutations --threads=max"],
-        "phpbench": "tools/phar/phpbench run --report='extends:aggregate,cols:[benchmark,subject,revs,its,mem_peak,mode,rstdev]' --time-unit=milliseconds ./tests/Benchmark",
-        "phpunit": ["@xdebug", "vendor/bin/phpunit --do-not-cache-result --colors=always"],
-        "test": ["@phpunit", "@infection"],
-        "unused": "tools/phar/composer-unused --no-interaction --ansi",
-        "xdebug": "@putenv XDEBUG_MODE=coverage"
-    },
     "extra": {
+        "ghostwriter": {
+            "container": {
+                "provider": [
+                    "Ghostwriter\\Cron\\Container\\CronProvider"
+                ]
+            }
+        },
         "thanks": {
             "name": "ghostwriter/wip",
             "url": "https://github.com/ghostwriter/wip"
         }
+    },
+    "scripts": {
+        "cache:clear": "rm -rf ./.cache/*",
+        "check": [
+            "@cache:clear",
+            "tools/phar/composer validate",
+            "@test"
+        ],
+        "docker": [
+            "@docker:build",
+            "@docker:run"
+        ],
+        "docker:build": "docker buildx build --pull --tag workspace .",
+        "docker:run": "docker run -v $(PWD):/github/workspace -w=/github/workspace -e GITHUB_DEBUG=1 -e GITHUB_WORKSPACE=/github/workspace -e GITHUB_TOKEN=github-token -e SIGNING_SECRET_KEY=secret-key workspace",
+        "git:submodule:update": "git submodule update --depth=1 --init --recursive --recommend-shallow --remote",
+        "infection": [
+            "@xdebug",
+            "tools/phar/infection --min-covered-msi=0 --min-msi=0 --show-mutations --threads=max"
+        ],
+        "phpbench": "tools/phar/phpbench run --report='extends:aggregate,cols:[benchmark,subject,revs,its,mem_peak,mode,rstdev]' --time-unit=milliseconds ./tests/Benchmark",
+        "phpunit": [
+            "@xdebug",
+            "vendor/bin/phpunit --do-not-cache-result --colors=always"
+        ],
+        "test": [
+            "@phpunit",
+            "@infection"
+        ],
+        "unused": "tools/phar/composer-unused --no-interaction --ansi",
+        "xdebug": "@putenv XDEBUG_MODE=coverage"
     }
 }
