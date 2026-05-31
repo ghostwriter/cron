@@ -36,7 +36,7 @@
         "#StopGenocide"
     ],
     "require": {
-        "php": "~8.4.0 || ~8.5.0",
+        "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
         "ext-mbstring": "*",
         "ghostwriter/case-converter": "^2.2.2",
         "ghostwriter/clock": "^3.0.2",
@@ -90,10 +90,28 @@
             "php": "8.4.999"
         },
         "platform-check": true,
-        "preferred-install": "dist",
+        "policy": {
+            "advisories": {
+                "block": true,
+                "audit": "fail"
+            },
+            "malware": {
+                "block": true,
+                "block-scope": "all",
+                "audit": "fail"
+            },
+            "abandoned": {
+                "block": true,
+                "audit": "fail"
+            }
+        },
+        "preferred-install": {
+            "*": "dist"
+        },
         "prepend-autoloader": true,
         "process-timeout": 5000,
         "sort-packages": true,
+        "strict-psr-autoloader": true,
         "use-parent-dir": false
     },
     "extra": {
@@ -105,15 +123,15 @@
             }
         },
         "thanks": {
-            "name": "ghostwriter/wip",
-            "url": "https://github.com/ghostwriter/wip"
+            "name": "ghostwriter/cron",
+            "url": "https://github.com/ghostwriter/cron"
         }
     },
     "scripts": {
         "cache:clear": "rm -rf ./.cache/*",
         "check": [
             "@cache:clear",
-            "tools/phar/composer validate",
+            "@composer validate",
             "@test"
         ],
         "docker": [
@@ -125,9 +143,9 @@
         "git:submodule:update": "git submodule update --depth=1 --init --recursive --recommend-shallow --remote",
         "infection": [
             "@xdebug",
-            "tools/phar/infection --min-covered-msi=0 --min-msi=0 --show-mutations --threads=max"
+            "vendor/ghostwriter/coding-standard/tools/phar/infection --min-covered-msi=0 --min-msi=0 --show-mutations --threads=max"
         ],
-        "phpbench": "tools/phar/phpbench run --report='extends:aggregate,cols:[benchmark,subject,revs,its,mem_peak,mode,rstdev]' --time-unit=milliseconds ./tests/Benchmark",
+        "phpbench": "vendor/ghostwriter/coding-standard/tools/phar/phpbench run --report='extends:aggregate,cols:[benchmark,subject,revs,its,mem_peak,mode,rstdev]' --time-unit=milliseconds ./tests/Benchmark",
         "phpunit": [
             "@xdebug",
             "vendor/bin/phpunit --do-not-cache-result --colors=always"
@@ -136,7 +154,6 @@
             "@phpunit",
             "@infection"
         ],
-        "unused": "tools/phar/composer-unused --no-interaction --ansi",
         "xdebug": "@putenv XDEBUG_MODE=coverage"
     }
 }
